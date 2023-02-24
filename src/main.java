@@ -2,8 +2,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 class TicTacToe {
-    final char SIGN_X = 'X';
-    final char SIGN_O = 'O';
+    final char SIGN_X = 'O';
+    final char SIGN_O = 'X';
     final char SIGN_EMPTY = '.';
     char[][] table;
     Random random;
@@ -27,18 +27,35 @@ class TicTacToe {
                 System.out.println("YOU WIN!");
                 break;
             }
+            if (isTableFull()) {
+                System.out.println("Sorry, DRAW!");
+                break;
+            }
             turnAI();
+            printTable();
             if (checkWin(SIGN_O)) {
                 System.out.println("AI WIN!");
                 break;
             }
+            if (isTableFull()) {
+                System.out.println("Sorry, DRAW!");
+                break;
+            }
         }
         System.out.println("GAME OVER.");
+        printTable();
     }
     void initTable() {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 3; col++)
                 table[row][col] = SIGN_EMPTY;
+    }
+    void printTable() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++)
+                System.out.print(table[row][col] + " ");
+            System.out.println();
+        }
     }
     void turnHuman() {
         int x, y;
@@ -77,6 +94,10 @@ class TicTacToe {
         return false;
     }
     boolean isTableFull() {
-        return false;
+        for (int row = 0; row < 3; row++)
+            for (int col = 0; col < 3; col++)
+                if (table[row][col] == SIGN_EMPTY)
+                    return false;
+        return true;
     }
 }
