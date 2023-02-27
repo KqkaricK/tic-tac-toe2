@@ -23,22 +23,39 @@ class TicTacToe {
         initTable();
         while (true) {
             turnHuman();
-            if (checkWin(SIGN_X)) {
-                System.out.println("YOU WIN!");
+            if (checkWin(SIGN_O)) {
+                System.out.println("AI LOSE!");
+                break;
+            }
+            if (isTableFull()) {
+                System.out.println("Sorry, DRAW!");
                 break;
             }
             turnAI();
-            if (checkWin(SIGN_O)) {
+            printTable();
+            if (checkWin(SIGN_X)) {
                 System.out.println("AI WIN!");
                 break;
             }
+            if (isTableFull()) {
+                System.out.println("Sorry, DRAW!");
+                break;
+            }
         }
-        System.out.println("GAME OVER.");
+        System.out.println("GAME OVER");
+        printTable();
     }
     void initTable() {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 3; col++)
                 table[row][col] = SIGN_EMPTY;
+    }
+    void printTable() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++)
+                System.out.print(table[row][col] + " ");
+            System.out.println();
+        }
     }
     void turnHuman() {
         int x, y;
@@ -47,11 +64,13 @@ class TicTacToe {
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         } while (!isCellValid(x, y));
-        table[y][x] = SIGN_X;
+        table[y][x] = SIGN_O;
     }
     boolean isCellValid(int x, int y) {
-        if (x < 0 || y < 0 || x >= 3|| y >= 3)
+        if (x < 0 || y < 0 || x >= 3 || y >= 3) {
+            System.out.println("Error!");
             return false;
+        }
         return table[y][x] == SIGN_EMPTY;
     }
     void turnAI() {
@@ -60,7 +79,7 @@ class TicTacToe {
             x = random.nextInt(3);
             y = random.nextInt(3);
         } while (!isCellValid(x, y));
-        table[y][x] = SIGN_O;
+        table[y][x] = SIGN_X;
     }
     boolean checkWin(char dot) {
         for (int i = 0; i < 3; i++)
@@ -69,14 +88,16 @@ class TicTacToe {
                     (table[0][i] == dot && table[1][i] == dot &&
                             table[2][i] == dot))
                 return true;
-        if ((table[0][0] == dot && table[1][1] == dot &&
+        return (table[0][0] == dot && table[1][1] == dot &&
                 table[2][2] == dot) ||
                 (table[2][0] == dot && table[1][1] == dot &&
-                        table[0][2] == dot))
-            return true;
-        return false;
+                        table[0][2] == dot);
     }
     boolean isTableFull() {
-        return false;
+        for (int row = 0; row < 3; row++)
+            for (int col = 0; col < 3; col++)
+                if (table[row][col] == SIGN_EMPTY)
+                    return false;
+        return true;
     }
 }
